@@ -20,6 +20,7 @@ export default async function handler(request, response) {
         response.status(500).json({ status: 'Method not allowed.' });
     }
 
+
     // if (request.method === "GET") {
     //   const place = await Place.findById(id);
 
@@ -31,4 +32,19 @@ export default async function handler(request, response) {
     //   return;
     // }
     // response.status(405).json({ status: "Method not allowed" });
+
+    response.status(200).json(place);
+    return;
+  }
+
+  if (request.method === "POST") {
+    const placeData = request.body;
+    await Place.create(placeData);
+
+    response.status(201).json({ status: "New place created" });
+    return;
+  }
+
+  response.status(405).json({ status: "Method not allowed" });
+
 }
