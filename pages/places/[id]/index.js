@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import styled from "styled-components";
-import Comments from "../../../components/Comments";
 import { StyledLink } from "../../../components/StyledLink";
 import { StyledButton } from "../../../components/StyledButton";
 import { StyledImage } from "../../../components/StyledImage";
@@ -33,21 +32,21 @@ const StyledLocationLink = styled(StyledLink)`
 export default function DetailsPage() {
   const router = useRouter();
   const { isReady } = router;
-  const { id } = router.query;
+  const { id } = router.query; // Extract route parameter 'id' from URL
 
+  // Fetch place data from API endpoint using SWR
   const { data: place, isLoading, error } = useSWR(`/api/places/${id}`);
 
   if (!isReady || isLoading || error) return <h2>Loading...</h2>;
 
   async function deletePlace() {
-    const response = await fetch(`/api/places/${id}`, { method: "DELETE" });
+    const response = await fetch(`/api/places/${id}`, { method: "DELETE" }); // Sends DELETE request to API
 
     if (response.ok) {
       router.push("/");
-      return;
+      return; // return is necessary in this specific case to stop the function execution to go further
     }
-
-    console.log("Deleting place ...");
+    console.error("Failed to delete place.");
   }
 
   return (

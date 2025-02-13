@@ -9,24 +9,26 @@ const StyledBackLink = styled(StyledLink)`
 `;
 
 export default function CreatePlacePage() {
-  const { mutate } = useSWR("/api/places/");
+  const { mutate } = useSWR("/api/places/"); // forces re-fetch of data at /api/places/
   const router = useRouter();
 
   async function addPlace(place) {
-    const response = await fetch("/api/places/[id]", {
+    // function sends POST request to /api/places/ with the new place's details
+    const response = await fetch("/api/places/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(place),
+      body: JSON.stringify(place), // Converting place object to JSON; place is the form data object.
     });
     console.log("adding place");
 
     if (response.ok) {
-      console.error(response.status);
       mutate();
       router.push("/");
+      return;
     }
+    console.error("Failed to delete place.");
   }
 
   return (
